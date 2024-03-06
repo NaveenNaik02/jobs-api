@@ -3,12 +3,12 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimiter from "express-rate-limit";
-import connectDB from "./src/db/connect";
-import authRouter from "./src/routes/auth";
-import jobsRouter from "./src/routes/jobs";
-import authenticateUser from "./src/middleware/authentication";
-import errorHandleMiddleware from "./src/middleware/error-handler";
-import notFound from "./src/middleware/not-found";
+import connectDB from "./db/connect";
+import authRouter from "./routes/auth";
+import jobsRouter from "./routes/jobs";
+import authenticateUser from "./middleware/authentication";
+import errorHandleMiddleware from "./middleware/error-handler";
+import notFound from "./middleware/not-found";
 
 const app = express();
 dotenv.config();
