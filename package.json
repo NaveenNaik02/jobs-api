@@ -7,6 +7,7 @@
     "build": "rimraf dist && tsc",
     "start": "nodemon app.ts",
     "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\""
   },
   "keywords": [],
@@ -34,5 +35,10 @@
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
-  }
+  },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ]
 }
