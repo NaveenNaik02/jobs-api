@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
+import swaggerUI from "swagger-ui-express";
+import YAML from "yamljs";
 import rateLimiter from "express-rate-limit";
 import connectDB from "./db/connect";
 import authRouter from "./routes/auth";
@@ -9,6 +11,7 @@ import jobsRouter from "./routes/jobs";
 import authenticateUser from "./middleware/authentication";
 import errorHandleMiddleware from "./middleware/error-handler";
 import notFound from "./middleware/not-found";
+const swaggerDocument = YAML.load("./swagger.yaml");
 
 const app = express();
 dotenv.config();
@@ -25,8 +28,10 @@ app.use(helmet());
 app.use(cors());
 
 app.get("/", (_req: Request, res: Response) => {
-  res.send("<h1>Jobs API</h1>");
+  res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //routes
 app.use("/api/v1/auth", authRouter);

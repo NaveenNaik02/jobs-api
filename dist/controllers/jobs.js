@@ -83,9 +83,11 @@ const deleteJob = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 exports.deleteJob = deleteJob;
 const updateJob = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("Top");
         if (!req.user || !req.user.userId) {
             throw new errors_1.UnauthenticatedError("Try Logging Again");
         }
+        console.log(req.user, "user");
         const { body: { company, position }, user: { userId }, params: { id: jobId }, } = req;
         if (company === "" || position === "") {
             throw new errors_1.BadRequestError("Company or Position fields cannot be empty");
@@ -94,6 +96,7 @@ const updateJob = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             _id: jobId,
             createdBy: userId,
         }, req.body, { new: true, runValidators: true });
+        res.status(http_status_codes_1.StatusCodes.OK).json({ job });
     }
     catch (error) {
         next(error);

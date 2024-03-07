@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const yamljs_1 = __importDefault(require("yamljs"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const connect_1 = __importDefault(require("./db/connect"));
 const auth_1 = __importDefault(require("./routes/auth"));
@@ -23,6 +25,7 @@ const jobs_1 = __importDefault(require("./routes/jobs"));
 const authentication_1 = __importDefault(require("./middleware/authentication"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
+const swaggerDocument = yamljs_1.default.load("./swagger.yaml");
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 //extra security
@@ -35,8 +38,9 @@ app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
 app.get("/", (_req, res) => {
-    res.send("<h1>Jobs API</h1>");
+    res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 //routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);

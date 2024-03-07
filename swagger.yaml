@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  title: Jobs API
+  contact: {}
+  version: "1.0"
+servers:
+  - url: https://jobs-api-tau.vercel.app/api/v1
+    variables: {}
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/registerrequest"
+                - example:
+                    name: testing
+                    email: xyz@gmail.com
+                    password: "1234567"
+            example:
+              name: testing
+              email: xyz@gmail.com
+              password: "1234567"
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      operationId: LoginUser
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/loginrequest"
+                - example:
+                    email: vercel@gmail.com
+                    password: secrete
+            example:
+              email: vercel@gmail.com
+              password: secrete
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+      security: []
+  /jobs:
+    get:
+      tags:
+        - Job
+      summary: Get All Jobs
+      operationId: GetAllJobs
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+    post:
+      tags:
+        - Job
+      summary: Create Job
+      operationId: CreateJob
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/createJobRequest"
+                - example:
+                    company: vercel testing
+                    position: testing
+            example:
+              company: vercel testing
+              position: testing
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: the job id
+
+    get:
+      tags:
+        - Job
+      summary: Get Job
+      operationId: GetJob
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+    patch:
+      tags:
+        - Job
+      summary: Update Job
+      operationId: UpdateJob
+      parameters: []
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/updateJobRequest"
+                - example:
+                    company: testing patch
+                    position: testing patch
+            example:
+              company: testing patch
+              position: testing patch
+        required: true
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+        - Job
+      summary: Delete Job
+      operationId: DeleteJob
+      parameters: []
+      responses:
+        "200":
+          description: ""
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    registerrequest:
+      title: registerrequest
+      required:
+        - name
+        - email
+        - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: testing
+        email: xyz@gmail.com
+        password: "1234567"
+    loginrequest:
+      title: loginrequest
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: vercel@gmail.com
+        password: secrete
+    createJobRequest:
+      title: createJobRequest
+      required:
+        - company
+        - position
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: vercel testing
+        position: testing
+    updateJobRequest:
+      title: updateJobRequest
+      required:
+        - company
+        - position
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: testing patch
+        position: testing patch
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+  - httpBearer: []
+tags:
+  - name: Auth
+    description: ""
+  - name: Job
+    description: ""

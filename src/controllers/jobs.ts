@@ -93,9 +93,11 @@ const updateJob = async (
   next: NextFunction
 ) => {
   try {
+    console.log("Top");
     if (!req.user || !req.user.userId) {
       throw new UnauthenticatedError("Try Logging Again");
     }
+    console.log(req.user, "user");
     const {
       body: { company, position },
       user: { userId },
@@ -112,6 +114,7 @@ const updateJob = async (
       req.body,
       { new: true, runValidators: true }
     );
+    res.status(StatusCodes.OK).json({ job });
   } catch (error) {
     next(error);
   }
