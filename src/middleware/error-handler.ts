@@ -18,6 +18,7 @@ const errorHandleMiddleware = (
   res: Response,
   _next: NextFunction
 ) => {
+  console.log("error middleware");
   const customError = {
     statusCode: error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
     message: error.message || "Something went wrong try again",
