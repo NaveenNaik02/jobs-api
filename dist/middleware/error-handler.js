@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
 const errorHandleMiddleware = (error, _req, res, _next) => {
-    console.log("error middleware");
     const customError = {
         statusCode: error.statusCode || http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
         message: error.message || "Something went wrong try again",
