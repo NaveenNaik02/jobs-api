@@ -4,7 +4,9 @@
     {
       "src": "dist/app.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**", "swagger.yaml"] }
+      "config": {
+        "includeFiles": ["dist/**", "swagger.yaml"]
+      }
     }
   ],
   "routes": [
@@ -15,44 +17,30 @@
     {
       "src": "/(.+)",
       "dest": "/$1"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api-docs/(.*)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/html; charset=UTF-8"
-        }
-      ]
     },
     {
-      "source": "/api-docs/swagger-ui.css",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/css; charset=UTF-8"
-        }
-      ]
+      "src": "/api-docs/(.*)",
+      "headers": {
+        "Content-Type": "text/html; charset=UTF-8"
+      }
     },
     {
-      "source": "/api-docs/swagger-ui-bundle.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=UTF-8"
-        }
-      ]
+      "src": "/api-docs/swagger-ui.css",
+      "headers": {
+        "Content-Type": "text/css; charset=UTF-8"
+      }
     },
     {
-      "source": "/api-docs/swagger-ui-standalone-preset.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=UTF-8"
-        }
-      ]
+      "src": "/api-docs/swagger-ui-bundle.js",
+      "headers": {
+        "Content-Type": "application/javascript; charset=UTF-8"
+      }
+    },
+    {
+      "src": "/api-docs/swagger-ui-standalone-preset.js",
+      "headers": {
+        "Content-Type": "application/javascript; charset=UTF-8"
+      }
     }
   ]
 }
