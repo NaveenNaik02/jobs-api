@@ -19,10 +19,8 @@
       "dest": "/$1"
     },
     {
-      "src": "/api-docs/(.*)",
-      "headers": {
-        "Content-Type": "text/html; charset=UTF-8"
-      }
+      "src": "/api-docs/swagger.yaml",
+      "dest": "/swagger.yaml"
     },
     {
       "src": "/api-docs/swagger-ui.css",
