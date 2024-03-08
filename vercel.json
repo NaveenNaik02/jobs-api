@@ -16,5 +16,43 @@
       "src": "/(.+)",
       "dest": "/$1"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api-docs/(.*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "source": "/api-docs/swagger-ui.css",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "source": "/api-docs/swagger-ui-bundle.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=UTF-8"
+        }
+      ]
+    },
+    {
+      "source": "/api-docs/swagger-ui-standalone-preset.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=UTF-8"
+        }
+      ]
+    }
   ]
 }
