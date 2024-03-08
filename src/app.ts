@@ -11,7 +11,8 @@ import jobsRouter from "./routes/jobs";
 import authenticateUser from "./middleware/authentication";
 import errorHandleMiddleware from "./middleware/error-handler";
 import notFound from "./middleware/not-found";
-const swaggerDocument = YAML.load("swagger.yaml");
+import path from "path";
+const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
 const app = express();
 dotenv.config();
