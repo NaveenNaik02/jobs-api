@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "scripts": {
-    "build": "cp ./swagger.yaml ./dist && tsc"
-  },
   "builds": [
     {
       "src": "dist/app.js",

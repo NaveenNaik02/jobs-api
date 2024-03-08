@@ -25,7 +25,7 @@ const jobs_1 = __importDefault(require("./routes/jobs"));
 const authentication_1 = __importDefault(require("./middleware/authentication"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
-const swaggerDocument = yamljs_1.default.load("./swagger.yaml");
+const swaggerDocument = yamljs_1.default.load("swagger.yaml");
 const app = (0, express_1.default)();
 dotenv_1.default.config();
 //extra security
