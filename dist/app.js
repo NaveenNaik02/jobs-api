@@ -26,8 +26,8 @@ const authentication_1 = __importDefault(require("./middleware/authentication"))
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
 const path_1 = __importDefault(require("path"));
-const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
 const app = (0, express_1.default)();
+const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
 dotenv_1.default.config();
 //extra security
 app.set("trust proxy", 1);
@@ -41,6 +41,7 @@ app.use((0, cors_1.default)());
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
+app.use(express_1.default.static(path_1.default.join(__dirname, "..", "swagger.yaml")));
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 //routes
 app.use("/api/v1/auth", auth_1.default);

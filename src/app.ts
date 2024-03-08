@@ -12,9 +12,11 @@ import authenticateUser from "./middleware/authentication";
 import errorHandleMiddleware from "./middleware/error-handler";
 import notFound from "./middleware/not-found";
 import path from "path";
-const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
 const app = express();
+
+const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
+
 dotenv.config();
 //extra security
 app.set("trust proxy", 1);
@@ -31,7 +33,7 @@ app.use(cors());
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-
+app.use(express.static(path.join(__dirname, "..", "swagger.yaml")));
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 //routes
