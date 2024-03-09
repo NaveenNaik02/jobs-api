@@ -5,6 +5,7 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import YAML from "yamljs";
 import rateLimiter from "express-rate-limit";
+import fs from "fs";
 import connectDB from "./db/connect";
 import authRouter from "./routes/auth";
 import jobsRouter from "./routes/jobs";
@@ -57,6 +58,22 @@ app.use(
   swaggerUI.serve,
   swaggerUI.setup(swaggerDocument)
 );
+
+app.get("/api-docs/swagger-ui.css", (_req: Request, res: Response) => {
+  // Read contents of swagger-ui.css file
+  const cssPath = path.join(swaggerUiAssetPath, "swagger-ui.css");
+  fs.readFile(cssPath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading swagger-ui.css:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      // Set Content-Type header
+      res.setHeader("Content-Type", "text/css");
+      // Send the CSS content
+      res.send(data);
+    }
+  });
+});
 
 // Define API routes
 app.use("/api/v1/auth", authRouter);

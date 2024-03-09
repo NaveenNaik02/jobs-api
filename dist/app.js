@@ -19,6 +19,7 @@ const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const fs_1 = __importDefault(require("fs"));
 const connect_1 = __importDefault(require("./db/connect"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const jobs_1 = __importDefault(require("./routes/jobs"));
@@ -58,6 +59,22 @@ app.use("/api-docs/", (req, res, next) => {
     // }
     next();
 }, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.get("/api-docs/swagger-ui.css", (_req, res) => {
+    // Read contents of swagger-ui.css file
+    const cssPath = path_1.default.join(swaggerUiAssetPath, "swagger-ui.css");
+    fs_1.default.readFile(cssPath, "utf8", (err, data) => {
+        if (err) {
+            console.error("Error reading swagger-ui.css:", err);
+            res.status(500).send("Internal Server Error");
+        }
+        else {
+            // Set Content-Type header
+            res.setHeader("Content-Type", "text/css");
+            // Send the CSS content
+            res.send(data);
+        }
+    });
+});
 // Define API routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);
