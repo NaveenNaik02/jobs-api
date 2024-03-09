@@ -42,14 +42,12 @@ app.use("/swagger", express_1.default.static(path_1.default.join(__dirname, ".."
 // Load Swagger document
 const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
 // Explicitly set the Content-Type for CSS files
-app.use("/api-docs", 
-// (req: Request, res: Response, next: NextFunction) => {
-//   if (req.url.endsWith(".css")) {
-//     res.setHeader("Content-Type", "text/css");
-//   }
-//   next();
-// },
-swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use("/api-docs", (req, res, next) => {
+    if (req.url.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+    }
+    next();
+}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 // Define routes
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
