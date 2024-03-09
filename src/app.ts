@@ -29,35 +29,34 @@ app.use(helmet());
 app.use(cors());
 
 // Serve Swagger YAML file statically
-app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
+// app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
 
 // Load Swagger document
 const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
 // Serve Swagger UI assets
 const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
+// Define routes
+app.get("/", (_req: Request, res: Response) => {
+  res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
+});
 app.use("/api-docs/swagger", express.static(swaggerUiAssetPath));
 
 // Explicitly set the Content-Type for CSS files
 app.use(
   "/api-docs/",
-  // (req: Request, res: Response, next: NextFunction) => {
-  //   if (req.url.endsWith(".css")) {
-  //     res.setHeader("Content-Type", "text/css");
-  //   }
-  //   if (req.url.endsWith(".js")) {
-  //     res.setHeader("Content-Type", "application/javascript");
-  //   }
-  //   next();
-  // },
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.url.endsWith(".css")) {
+      res.setHeader("Content-Type", "text/css");
+    }
+    // if (req.url.endsWith(".js")) {
+    //   res.setHeader("Content-Type", "application/javascript");
+    // }
+    next();
+  },
   swaggerUI.serve,
   swaggerUI.setup(swaggerDocument)
 );
-
-// Define routes
-app.get("/", (_req: Request, res: Response) => {
-  res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
-});
 
 // Define API routes
 app.use("/api/v1/auth", authRouter);
