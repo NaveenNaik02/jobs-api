@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
@@ -38,13 +38,23 @@ const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 app.use("/api-docs", express.static(swaggerUiAssetPath));
 
+// Explicitly set the Content-Type for CSS files
+app.use(
+  "/api-docs/swagger",
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.url.endsWith(".css")) {
+      res.setHeader("Content-Type", "text/css");
+    }
+    next();
+  },
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument)
+);
+
 // Define routes
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-
-// Use swaggerUI.serve with swaggerDocument directly
-app.use("/api-docs/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // Define API routes
 app.use("/api/v1/auth", authRouter);

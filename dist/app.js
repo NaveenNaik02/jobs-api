@@ -44,12 +44,17 @@ const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..
 // Serve Swagger UI assets
 const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 app.use("/api-docs", express_1.default.static(swaggerUiAssetPath));
+// Explicitly set the Content-Type for CSS files
+app.use("/api-docs/swagger", (req, res, next) => {
+    if (req.url.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+    }
+    next();
+}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 // Define routes
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-// Use swaggerUI.serve with swaggerDocument directly
-app.use("/api-docs/swagger", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 // Define API routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);
