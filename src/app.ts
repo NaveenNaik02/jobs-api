@@ -33,9 +33,20 @@ app.use(cors());
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-app.use(express.static(path.join(__dirname, "..", "swagger.yaml")));
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use(
+  "/api-docs/swagger-ui",
+  express.static(path.join(__dirname, "..", "swagger-assets"), {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css; charset=UTF-8");
+      } else if (path.endsWith(".js")) {
+        res.setHeader("Content-Type", "application/javascript; charset=UTF-8");
+      }
+    },
+  })
+);
 //routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", authenticateUser, jobsRouter);

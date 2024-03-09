@@ -41,8 +41,17 @@ app.use((0, cors_1.default)());
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-app.use(express_1.default.static(path_1.default.join(__dirname, "..", "swagger.yaml")));
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use("/api-docs/swagger-ui", express_1.default.static(path_1.default.join(__dirname, "..", "swagger-assets"), {
+    setHeaders: (res, path) => {
+        if (path.endsWith(".css")) {
+            res.setHeader("Content-Type", "text/css; charset=UTF-8");
+        }
+        else if (path.endsWith(".js")) {
+            res.setHeader("Content-Type", "application/javascript; charset=UTF-8");
+        }
+    },
+}));
 //routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);
