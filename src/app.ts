@@ -34,13 +34,17 @@ app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
 // Load Swagger document
 const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
+// Serve Swagger UI assets
+const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
+app.use("/api-docs", express.static(swaggerUiAssetPath));
+
 // Define routes
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
 
 // Use swaggerUI.serve with swaggerDocument directly
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+app.use("/api-docs/swagger", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // Define API routes
 app.use("/api/v1/auth", authRouter);
