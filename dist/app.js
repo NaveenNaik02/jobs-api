@@ -41,6 +41,9 @@ app.use((0, cors_1.default)());
 app.use("/swagger", express_1.default.static(path_1.default.join(__dirname, "..", "swagger.yaml")));
 // Load Swagger document
 const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
+// Serve Swagger UI assets
+const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
+app.use("/api-docs/swagger", express_1.default.static(swaggerUiAssetPath));
 // Explicitly set the Content-Type for CSS files
 app.use("/api-docs/", (req, res, next) => {
     if (req.url.endsWith(".css")) {
