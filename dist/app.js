@@ -27,44 +27,42 @@ const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
-const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
 dotenv_1.default.config();
-//extra security
+// Extra security
 app.set("trust proxy", 1);
 app.use((0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, //limit each IP to 100 request per windowMs
+    max: 100, // Limit each IP to 100 requests per windowMs
 }));
 app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
+// Serve Swagger YAML file statically
+app.use("/swagger", express_1.default.static(path_1.default.join(__dirname, "..", "swagger.yaml")));
+// Load Swagger document
+const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
+// Define routes
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
+// Use swaggerUI.serve with swaggerDocument directly
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
-app.use("/api-docs/swagger-ui", express_1.default.static(path_1.default.join(__dirname, "..", "swagger-assets"), {
-    setHeaders: (res, path) => {
-        if (path.endsWith(".css")) {
-            res.setHeader("Content-Type", "text/css; charset=UTF-8");
-        }
-        else if (path.endsWith(".js")) {
-            res.setHeader("Content-Type", "application/javascript; charset=UTF-8");
-        }
-    },
-}));
-//routes
+// Define API routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);
+// Middleware for handling 404 errors
 app.use(not_found_1.default);
+// Middleware for handling errors
 app.use(error_handler_1.default);
+// Start server
 const port = process.env.PORT || 3000;
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, connect_1.default)(process.env.MONGO_URI);
-        app.listen(port, () => console.log(`server is listening on port ${port}`));
+        app.listen(port, () => console.log(`Server is listening on port ${port}`));
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
 });
 start();

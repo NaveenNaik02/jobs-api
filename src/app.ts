@@ -15,51 +15,51 @@ import path from "path";
 
 const app = express();
 
-const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
-
 dotenv.config();
-//extra security
+// Extra security
 app.set("trust proxy", 1);
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, //limit each IP to 100 request per windowMs
+    max: 100, // Limit each IP to 100 requests per windowMs
   })
 );
 app.use(express.json());
 app.use(helmet());
 app.use(cors());
 
+// Serve Swagger YAML file statically
+app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
+
+// Load Swagger document
+const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
+
+// Define routes
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
 
+// Use swaggerUI.serve with swaggerDocument directly
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
-app.use(
-  "/api-docs/swagger-ui",
-  express.static(path.join(__dirname, "..", "swagger-assets"), {
-    setHeaders: (res, path) => {
-      if (path.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css; charset=UTF-8");
-      } else if (path.endsWith(".js")) {
-        res.setHeader("Content-Type", "application/javascript; charset=UTF-8");
-      }
-    },
-  })
-);
-//routes
+
+// Define API routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", authenticateUser, jobsRouter);
+
+// Middleware for handling 404 errors
 app.use(notFound);
+
+// Middleware for handling errors
 app.use(errorHandleMiddleware);
 
+// Start server
 const port = process.env.PORT || 3000;
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI!);
-    app.listen(port, () => console.log(`server is listening on port ${port}`));
+    app.listen(port, () => console.log(`Server is listening on port ${port}`));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
