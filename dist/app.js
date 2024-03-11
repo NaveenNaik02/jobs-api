@@ -19,7 +19,6 @@ const cors_1 = __importDefault(require("cors"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const yamljs_1 = __importDefault(require("yamljs"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
-const fs_1 = __importDefault(require("fs"));
 const connect_1 = __importDefault(require("./db/connect"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const jobs_1 = __importDefault(require("./routes/jobs"));
@@ -38,19 +37,14 @@ app.use((0, express_rate_limit_1.default)({
 app.use(express_1.default.json());
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
-// Serve Swagger YAML file statically
-// app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
 // CDN CSS
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 // Load Swagger document
 const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
-// Serve Swagger UI assets
-const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 // Define routes
 app.get("/", (_req, res) => {
     res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-app.use("/api-docs/swagger", express_1.default.static(swaggerUiAssetPath));
 // Explicitly set the Content-Type for CSS files
 app.use("/api-docs/", (req, res, next) => {
     if (req.url.endsWith(".css")) {
@@ -61,22 +55,6 @@ app.use("/api-docs/", (req, res, next) => {
     customCssUrl: CSS_URL,
     customCss: ".swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }",
 }));
-app.get("/api-docs/swagger-ui.css", (_req, res) => {
-    // Read contents of swagger-ui.css file
-    const cssPath = path_1.default.join(swaggerUiAssetPath, "swagger-ui.css");
-    fs_1.default.readFile(cssPath, "utf8", (err, data) => {
-        if (err) {
-            console.error("Error reading swagger-ui.css:", err);
-            res.status(500).send("Internal Server Error");
-        }
-        else {
-            // Set Content-Type header
-            res.setHeader("Content-Type", "text/css");
-            // Send the CSS content
-            res.send(data);
-        }
-    });
-});
 // Define API routes
 app.use("/api/v1/auth", auth_1.default);
 app.use("/api/v1/jobs", authentication_1.default, jobs_1.default);

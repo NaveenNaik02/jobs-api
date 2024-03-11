@@ -29,22 +29,17 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 
-// Serve Swagger YAML file statically
-// app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
-
 // CDN CSS
 const CSS_URL =
   "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+
 // Load Swagger document
 const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
-// Serve Swagger UI assets
-const swaggerUiAssetPath = require("swagger-ui-dist").getAbsoluteFSPath();
 // Define routes
 app.get("/", (_req: Request, res: Response) => {
   res.send('<h1>Jobs API</h1><a href="/api-docs">Documentation</a>');
 });
-app.use("/api-docs/swagger", express.static(swaggerUiAssetPath));
 
 // Explicitly set the Content-Type for CSS files
 app.use(
@@ -62,22 +57,6 @@ app.use(
       ".swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }",
   })
 );
-
-app.get("/api-docs/swagger-ui.css", (_req: Request, res: Response) => {
-  // Read contents of swagger-ui.css file
-  const cssPath = path.join(swaggerUiAssetPath, "swagger-ui.css");
-  fs.readFile(cssPath, "utf8", (err, data) => {
-    if (err) {
-      console.error("Error reading swagger-ui.css:", err);
-      res.status(500).send("Internal Server Error");
-    } else {
-      // Set Content-Type header
-      res.setHeader("Content-Type", "text/css");
-      // Send the CSS content
-      res.send(data);
-    }
-  });
-});
 
 // Define API routes
 app.use("/api/v1/auth", authRouter);
