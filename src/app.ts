@@ -49,12 +49,12 @@ app.use("/api-docs/swagger", express.static(swaggerUiAssetPath));
 // Explicitly set the Content-Type for CSS files
 app.use(
   "/api-docs/",
-  // (req: Request, res: Response, next: NextFunction) => {
-  //   if (req.url.endsWith(".css")) {
-  //     res.setHeader("Content-Type", "text/css");
-  //   }
-  //   next();
-  // },
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.url.endsWith(".css")) {
+      res.setHeader("Content-Type", "text/css");
+    }
+    next();
+  },
   swaggerUI.serve,
   swaggerUI.setup(swaggerDocument, { customCss: CSS_URL })
 );
