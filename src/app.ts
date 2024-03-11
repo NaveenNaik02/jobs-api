@@ -5,7 +5,6 @@ import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import YAML from "yamljs";
 import rateLimiter from "express-rate-limit";
-import fs from "fs";
 import connectDB from "./db/connect";
 import authRouter from "./routes/auth";
 import jobsRouter from "./routes/jobs";
@@ -15,8 +14,8 @@ import notFound from "./middleware/not-found";
 import path from "path";
 
 const app = express();
-
 dotenv.config();
+
 // Extra security
 app.set("trust proxy", 1);
 app.use(
