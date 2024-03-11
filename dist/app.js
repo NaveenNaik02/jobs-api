@@ -40,6 +40,8 @@ app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)());
 // Serve Swagger YAML file statically
 // app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
+// CDN CSS
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 // Load Swagger document
 const swaggerDocument = yamljs_1.default.load(path_1.default.join(__dirname, "..", "swagger.yaml"));
 // Serve Swagger UI assets
@@ -58,7 +60,7 @@ app.use("/api-docs/", (req, res, next) => {
     //   res.setHeader("Content-Type", "application/javascript");
     // }
     next();
-}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { customCss: CSS_URL }));
 app.get("/api-docs/swagger-ui.css", (_req, res) => {
     // Read contents of swagger-ui.css file
     const cssPath = path_1.default.join(swaggerUiAssetPath, "swagger-ui.css");

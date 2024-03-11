@@ -32,6 +32,9 @@ app.use(cors());
 // Serve Swagger YAML file statically
 // app.use("/swagger", express.static(path.join(__dirname, "..", "swagger.yaml")));
 
+// CDN CSS
+const CSS_URL =
+  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 // Load Swagger document
 const swaggerDocument = YAML.load(path.join(__dirname, "..", "swagger.yaml"));
 
@@ -56,7 +59,7 @@ app.use(
     next();
   },
   swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument)
+  swaggerUI.setup(swaggerDocument, { customCss: CSS_URL })
 );
 
 app.get("/api-docs/swagger-ui.css", (_req: Request, res: Response) => {
