@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "dist/app.js",
-      "use": "@vercel/node",
+      "use": "@now/node",
       "config": {
         "includeFiles": ["dist/**", "swagger.yaml"]
       }
