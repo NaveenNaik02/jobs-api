@@ -52,15 +52,14 @@ app.get("/", (_req, res) => {
 });
 app.use("/api-docs/swagger", express_1.default.static(swaggerUiAssetPath));
 // Explicitly set the Content-Type for CSS files
-app.use("/api-docs/", (req, res, next) => {
-    if (req.url.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css");
-    }
-    // if (req.url.endsWith(".js")) {
-    //   res.setHeader("Content-Type", "application/javascript");
-    // }
-    next();
-}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { customCss: CSS_URL }));
+app.use("/api-docs/", 
+// (req: Request, res: Response, next: NextFunction) => {
+//   if (req.url.endsWith(".css")) {
+//     res.setHeader("Content-Type", "text/css");
+//   }
+//   next();
+// },
+swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { customCss: CSS_URL }));
 app.get("/api-docs/swagger-ui.css", (_req, res) => {
     // Read contents of swagger-ui.css file
     const cssPath = path_1.default.join(swaggerUiAssetPath, "swagger-ui.css");
