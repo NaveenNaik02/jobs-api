@@ -56,7 +56,7 @@ app.use(
     next();
   },
   swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument, { customCss: "/swagger-ui.css" })
+  swaggerUI.setup(swaggerDocument, { customCssUrl: CSS_URL })
 );
 
 app.get("/api-docs/swagger-ui.css", (_req: Request, res: Response) => {

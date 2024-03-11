@@ -57,7 +57,7 @@ app.use("/api-docs/", (req, res, next) => {
         res.setHeader("Content-Type", "text/css");
     }
     next();
-}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { customCss: "/swagger-ui.css" }));
+}, swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument, { customCssUrl: CSS_URL }));
 app.get("/api-docs/swagger-ui.css", (_req, res) => {
     // Read contents of swagger-ui.css file
     const cssPath = path_1.default.join(swaggerUiAssetPath, "swagger-ui.css");
