@@ -4,7 +4,7 @@ Jobs API with Express.js
 
 ## Installation
 
-Set up your Next.js starter project
+Set up your Express.js starter project
 
 ```bash
     npm install & npm run dev
